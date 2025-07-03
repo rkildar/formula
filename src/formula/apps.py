@@ -7,3 +7,4 @@ class FormulaAdminConfig(AppConfig):
 
     def ready(self):
         import formula.signals  # NOQA
+        import formula.admin_cma  # NOQA
