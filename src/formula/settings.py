@@ -111,8 +111,15 @@ TEMPLATES = [
 ######################################################################
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ROOT_DIR / "database.sqlite",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "st_cma_backup_0405",
+        "USER": "root",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "3306",
+        "OPTIONS": {
+            "charset": "utf8mb3",
+        },
     },
 }
 
@@ -187,12 +194,12 @@ STORAGES = {
 # Unfold
 ######################################################################
 UNFOLD = {
-    "SITE_HEADER": _("Formula Admin"),
-    "SITE_TITLE": _("Formula Admin"),
-    "SITE_SYMBOL": "settings",
+    "SITE_HEADER": _("CMA Fleet Management"),
+    "SITE_TITLE": _("CMA Fleet Management"),
+    "SITE_SYMBOL": "directions_car",
     # "SHOW_HISTORY": True,
     "ENVIRONMENT": "formula.utils.environment_callback",
-    "DASHBOARD_CALLBACK": "formula.views.dashboard_callback",
+    "DASHBOARD_CALLBACK": "formula.views_cma.dashboard_callback",
     "LOGIN": {
         "image": lambda request: static("images/login-bg.jpg"),
     },
@@ -278,12 +285,94 @@ UNFOLD = {
                         "link": reverse_lazy("admin:index"),
                     },
                     {
+                        "title": _("Employees"),
+                        "icon": "person",
+                        "link": reverse_lazy("admin:formula_employee_changelist"),
+                    },
+                    {
+                        "title": _("Vehicles"),
+                        "icon": "directions_car",
+                        "link": reverse_lazy("admin:formula_vehicle_changelist"),
+                    },
+                    {
+                        "title": _("Car Conditions"),
+                        "icon": "car_repair",
+                        "link": reverse_lazy("admin:formula_carcondition_changelist"),
+                    },
+                    {
+                        "title": _("Damages"),
+                        "icon": "dangerous",
+                        "link": reverse_lazy("admin:formula_damage_changelist"),
+                    },
+                    {
+                        "title": _("Daily Reports"),
+                        "icon": "summarize",
+                        "link": reverse_lazy("admin:formula_daily_changelist"),
+                    },
+                    {
+                        "title": _("Appointments"),
+                        "icon": "event",
+                        "link": reverse_lazy("admin:formula_appointment_changelist"),
+                    },
+                ],
+            },
+            {
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("CMA Users"),
+                        "icon": "person",
+                        "link": reverse_lazy("admin:formula_cmauser_changelist"),
+                    },
+                    {
+                        "title": _("Employee Groups"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:formula_employeegroup_changelist"),
+                    },
+                    {
+                        "title": _("Reference Data"),
+                        "icon": "list",
+                        "children": [
+                            {
+                                "title": _("Interval Groups"),
+                                "icon": "schedule",
+                                "link": reverse_lazy("admin:formula_intervalgroup_changelist"),
+                            },
+                            {
+                                "title": _("Constructions"),
+                                "icon": "construction",
+                                "link": reverse_lazy("admin:formula_vconstruction_changelist"),
+                            },
+                            {
+                                "title": _("Impulsions"),
+                                "icon": "electric_bolt",
+                                "link": reverse_lazy("admin:formula_vimpulsion_changelist"),
+                            },
+                            {
+                                "title": _("Pollutant Classes"),
+                                "icon": "air",
+                                "link": reverse_lazy("admin:formula_vpollutantclass_changelist"),
+                            },
+                        ],
+                    },
+                    {
+                        "title": _("Tasks"),
+                        "icon": "task_alt",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_clockedschedule_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _("Formula 1 (Legacy)"),
+                "items": [
+                    {
                         "title": _("Drivers"),
                         "icon": "sports_motorsports",
                         "link": lambda request: reverse_lazy(
                             "admin:formula_driver_changelist"
                         ),
-                        # "link": reverse_lazy("admin:formula_driver_changelist"),
                     },
                     {
                         "title": _("Circuits"),
@@ -301,15 +390,9 @@ UNFOLD = {
                         "icon": "grade",
                         "link": reverse_lazy("admin:formula_standing_changelist"),
                         "permission": "formula.utils.permission_callback",
-                        # "permission": lambda request: request.user.is_superuser,
                     },
-                ],
-            },
-            {
-                "separator": True,
-                "items": [
                     {
-                        "title": _("Users"),
+                        "title": _("F1 Users"),
                         "icon": "person",
                         "link": reverse_lazy("admin:formula_user_changelist"),
                     },
@@ -317,13 +400,6 @@ UNFOLD = {
                         "title": _("Groups"),
                         "icon": "group",
                         "link": reverse_lazy("admin:auth_group_changelist"),
-                    },
-                    {
-                        "title": _("Tasks"),
-                        "icon": "task_alt",
-                        "link": reverse_lazy(
-                            "admin:django_celery_beat_clockedschedule_changelist"
-                        ),
                     },
                 ],
             },
